@@ -4,6 +4,11 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+<<<<<<< HEAD
+=======
+    // "test": "mocha __tests__/bottest.js",
+    // "start": "babel-node app.js --presets es2015,stage-2"
+>>>>>>> 5b7e46e3894da42694024158522dde6e355d84ea
     "start": "node app.js"
   },
   "author": "Thinh Nguyen",
