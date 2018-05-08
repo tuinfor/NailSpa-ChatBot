@@ -1,8 +1,6 @@
-const
-    bodyParser = require('body-parser'),
-    express = require('express');
-    recieve = require('../helper/receive-message');
-
+const bodyParser = require('body-parser');
+const express = require('express');
+const receive = require('../helper/receive-message.js');
 const router = express.Router();
 
 router.post('/', (req, res) => {
@@ -23,18 +21,17 @@ router.post('/', (req, res) => {
 
     //   // Get the sender PSID
       let sender_psid = webhook_event.sender.id;
+      console.log('Sender PSID: ' + sender_psid);
 
     //   // Checks if the event is a message or postback and
     //   // pass the event to the appropriate handler function
       if (webhook_event.message.quick_reply) {
-        recieve.handleQuickReply(sender_psid, webhook_event.message);
+        receive.handleQuickReply(sender_psid, webhook_event.message);
+      } else if (webhook_event.message) {
+        receive.handleMessage(sender_psid, webhook_event.message);
+      } else if (webhook_event.postback) {
+        receive.handlePostback(sender_psid, webhook_event.postback);
       }
-    //   } else if (webhook_event.message) {
-    //     recieve.handleMessage(sender_psid, webhook_event.message);
-    //   } else if (webhook_event.postback) {
-    //     recieve.handlePostback(sender_psid, webhook_event.postback);
-    //   }
-
     });
 
     // Returns a '200 OK' response to all requests

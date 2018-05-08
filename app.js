@@ -1,10 +1,9 @@
 // Imports dependencies and set up http server
-const
-  request = require('request'),
-  express = require('express'),
-  bodyParser = require('body-parser'),
-  app = express(),
-  webhooks = require('./routes/webhooks');
+const request = require('request');
+const express = require('express');
+const bodyParser = require('body-parser');
+const app = express();
+const webhooks = require('./routes/webhooks');
 
 // Sets server port and logs message on success
 // process.env.PORT ||

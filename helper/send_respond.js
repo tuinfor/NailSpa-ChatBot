@@ -12,7 +12,7 @@ function directMessage(sender_psid, response) {
     // Send the HTTP request to the Messenger Platform
     request({
         "uri": "https://graph.facebook.com/v2.6/me/messages",
-        "qs": { "access_token": EAADSxzqieyEBANwTrRZAx7NSEA8oEgavb2ESSuAFHEetXlAPP1so62RZCcyB16mkmOOuIJvJXSSZBW47qMZAnvOXZBlXjwafFZCWXg4JK3fNUx3XxKJNyeSIgFffAGEsknhYyU9dw1rPSvAL9d6nXZB5ruwSMcenYGH4TE52OQINTBAjtPYZCDcp},
+        "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
         "method": "POST",
         "json": request_body
     }, (err, res, body) => {

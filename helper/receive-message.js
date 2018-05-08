@@ -3,10 +3,39 @@ const request = require('request');
 const sendResponse = require('./send_respond.js');
 
 function handleMessage(sender_psid, received_message) {
-	console.log('test')
-	let key = received_message.text;
-	sendResponse.directMessage(sender_psid,key);
+	let response;
+	console.log('test');
+	response = {
+      "text": `You sent the message: "${received_message.text}". Now send me an image!`
+    }
+   	callSendAPI(sender_psid, response);
+   	console.log(response);
+   	console.log('replied');
+
 }
+function callSendAPI(sender_psid, response) {
+  // Construct the message body
+  let request_body = {
+    "recipient": {
+      "id": sender_psid
+    },
+    "message": response
+  }
+  // Send the HTTP request to the Messenger Platform
+  request({
+    "uri": "https://graph.facebook.com/v2.6/me/messages",
+    "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN },
+    "method": "POST",
+    "json": request_body
+  }, (err, res, body) => {
+    if (!err) {
+      console.log('message sent!')
+    } else {
+      console.error("Unable to send message:" + err);
+    }
+  });
+}
+
 
 module.exports = {
   handleMessage
