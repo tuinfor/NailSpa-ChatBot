@@ -22,12 +22,13 @@ router.post('/', (req, res) => {
     //   let user_message = webhook_event.message.text;
 
     //   // Get the sender PSID
-    //   let sender_psid = webhook_event.sender.id;
+      let sender_psid = webhook_event.sender.id;
 
     //   // Checks if the event is a message or postback and
     //   // pass the event to the appropriate handler function
-    //   if (webhook_event.message.quick_reply) {
-    //     recieve.handleQuickReply(sender_psid, webhook_event.message);
+      if (webhook_event.message.quick_reply) {
+        recieve.handleQuickReply(sender_psid, webhook_event.message);
+      }
     //   } else if (webhook_event.message) {
     //     recieve.handleMessage(sender_psid, webhook_event.message);
     //   } else if (webhook_event.postback) {

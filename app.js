@@ -5,9 +5,9 @@ const
   bodyParser = require('body-parser'),
   app = express(),
   webhooks = require('./routes/webhooks');
-  
+
 // Sets server port and logs message on success
-// process.env.PORT || 
+// process.env.PORT ||
 app.listen(process.env.PORT || 1337, () => {
 // app.listen(1337, () => {
 

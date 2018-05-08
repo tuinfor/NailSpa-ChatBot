@@ -1,13 +1,11 @@
-const
-  bodyParser = require('body-parser'),
-  request = require('request')
+const bodyParser = require('body-parser');
+const request = require('request');
+const sendResponse = require('./send_respond.js');
 
-const handleMessage = (sender_psid, received_message) => {
+function handleMessage(sender_psid, received_message) => {
 	console.log('test')
-}
-
-const handleQuickReply = (sender_psid, received_message) => {
-
+	let key = received_message.text;
+	sendResponse.directMessage(sender_psid,key);
 }
 
 module.exports = {
