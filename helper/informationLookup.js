@@ -14,7 +14,7 @@ function currentWeather(sender_psid) {
 	console.log(status);
 	sendResponse.directMessage(sender_psid, status);
 
-	PythonShell.run('../script/get_current_weather.py', (err, data) => {
+	PythonShell.run('./script/get_current_weather.py', (err, data) => {
 		if (err) {
 			let response = {
 				"text" : `Can not fetch current weather`
