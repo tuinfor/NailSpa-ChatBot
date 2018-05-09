@@ -71,6 +71,7 @@ function handleQuickReply(sender_psid, received_message) {
     	}
 
     	else if (key.includes('_Current Weather')) {
+    		console.log('in weather already')
     		lookUp.currentWeather(sender_psid);
     		handleCases.timeOutReset(sender_psid);
     	}
@@ -96,7 +97,7 @@ function handleQuickReply(sender_psid, received_message) {
 
 // Handle the postback message from user
 function handlePostback(sender_psid, messagePostback) {
-	console.log("Curremt message: " + messagePostback.payload)
+	console.log("Current message: " + messagePostback.payload)
 }
 
 module.exports = {
