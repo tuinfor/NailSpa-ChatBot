@@ -121,7 +121,7 @@ function callOption(sender_psid) {
     });
 }
 
-function addressWebView(sender_psid) {
+function webView(sender_psid, titleTemp, title, imgUrl, webUrl) {
     let request_body = {
         "recipient": {
             "id": sender_psid
@@ -135,15 +135,42 @@ function addressWebView(sender_psid) {
                 "elements":
                 [
                     {
-                        "title": '1240 Hwy 54 West #302, Fayetteville GA 30214',
-                        "image_url": "https://lh5.googleusercontent.com/p/AF1QipM8pVE2qmPNnHx012FNc1esjWWBP-uv5rYVsGDu=w392-h303-k-no",
+                        "title": titleTemp,
+                        "image_url": imgUrl,
                         "buttons":[
                         {
                             "type":"web_url",
-                            "url":"https://goo.gl/maps/mVSj22Cyenx",
-                            "title":"View on Google Map",
+                            "url": webUrl,
+                            "title": title,
                             "webview_height_ratio": "tall",
-                            "messenger_extensions": "false",
+                            "messenger_extensions": "false"
+                        },
+                        {
+                            "type": "element_share",
+                            "share_contents": {
+                                "attachment": {
+                                    "type": "template",
+                                    "payload": {
+                                        "template_type": "generic",
+                                        "image_aspect_ratio": 'square',
+                                        "elements": [
+                                            {
+                                                "title": titleTemp,
+                                                "image_url": imgUrl,
+                                                "buttons": [
+                                                    {
+                                                        "type":"web_url",
+                                                        "url": webUrl,
+                                                        "title": title,
+                                                        "webview_height_ratio": "tall",
+                                                        "messenger_extensions": "false"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
                         }
                         ]
                     }
@@ -170,5 +197,5 @@ module.exports = {
     genericTemplate,
     quickReplies,
     callOption,
-    addressWebView
+    webView
 };
