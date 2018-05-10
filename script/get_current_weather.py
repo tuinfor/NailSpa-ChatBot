@@ -25,6 +25,7 @@ def main():
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("no-sandbox")
 
+    # Need to debug this
     try:
         response = urllib3
     except SocketError as e:
@@ -49,6 +50,11 @@ def main():
     minutes = currentDT.strftime("%I:%M %p")[3:5]
     amPm = currentDT.strftime("%I:%M %p")[6::]
 
+    if (int(hour[:1]) == 0):
+        hours = int(hour[1:])
+    else:
+        hours = int(hour)
+
     print("Condition: " + status)
     print("Current Degree: " + degree)
     print("Precipitation: " + precipitation)
@@ -58,12 +64,12 @@ def main():
     # Check the current condition weather
     if (int(degree) >= 60):
         if (amPm == 'AM'):
-            if (int(hour) >= 6 and int(hour) <= 11):
+            if (hours >= 6 and hours <= 11):
                 print("The weather is really nice today! Let come to our salon and relax.")
             else:
                 print("The weather is really nice today! But we already closed, let come tomorrow.")
         elif (amPm == 'PM'):
-            if (int(hour) == 12 or (int(hour) <=7 and int(minutes) <= 25)):
+            if (hours == 12 or hours <=7):
                 print("The weather is really nice today! Let come to our salon and relax.")
             else:
                 print("The weather is really nice today! But we already closed, let come tomorrow.")

@@ -3,28 +3,28 @@ const request = require('request');
 const sendResponse = require('./send_respond.js');
 const handleCases = require('./handleCases.js');
 const lookUp = require('./informationLookup.js');
+const NPL = require('./nplProcess.js');
 
 let handleChoice = {};
 let currentMode = [];
 
 // Handle the basic message from users
 function handleMessage(sender_psid, received_message) {
-	console.log("Current message: " + received_message.text)
 	let response;
 	let key = received_message.text;
+	console.log("Current message: " + received_message.text)
 
-	// Handle emoji symbol cause of crash
-	if (((typeof key) === 'undefined')) {
+	// Handle the emoji message
+	if (((typeof key) === 'undefined') && (currentMode.length == 0)) {
 		handleCases.somethingElse(sender_psid);
 	}
 
 	// Handle to begin this bot has to type start
-	else if (key.toLowerCase() === 'start') {
+	else if ((key.toLowerCase() === 'start') && (currentMode.length == 0)) {
 		handleCases.getBegin(sender_psid);
-		currentMode = [];
 	}
 
-	// Handle if it is not in the currentMode
+	// Handle if it is not in the currentMode, if the message is not start, exit
 	else if ((currentMode.length == 0) && (key.toLowerCase() != 'start' || key.toLowerCase() != 'exit')) {
 		handleCases.somethingElse(sender_psid);
 	}
@@ -32,15 +32,14 @@ function handleMessage(sender_psid, received_message) {
 	// Handle to reset this bot if type exit
 	else if (key.toLowerCase() === 'exit') {
 		currentMode = [];
-		handleCases.goBack(sender_psid);
+		handleCases.goBack(sender_psid, 'exit');
 	}
 
 	// Handle the if it is in currentMode
 	if (currentMode[0] === 'Q&A') {
-		response = {
-			"text": `We are currently working on this features. Please come back to visit later. To exit this mode type Exit`
-		}
-		sendResponse.directMessage(sender_psid, response);
+
+		// Call asyns to get the message respone in apiai
+		NPL.nplanguageMessage(sender_psid, key);
 	}
 }
 
@@ -54,10 +53,7 @@ function handleQuickReply(sender_psid, received_message) {
     	// Handle case if in Q&A mode
     	if (key.includes('_Q&A')) {
     		currentMode.push('Q&A');
-    		response = {
-    			"text": `You are currently on Q&A mode. Please ask anything you want. To exit this mode type Exit`
-    		}
-    		sendResponse.directMessage(sender_psid, response);
+    		handleCases.QAmode(sender_psid);
     	}
 
     	// Handle case if in NailSpa mode
@@ -67,29 +63,22 @@ function handleQuickReply(sender_psid, received_message) {
 
     	// Handle case if in Hourly mode
     	else if (key.includes('_Hourly')) {
-    		response = {
-    			"text" : `MONDAY: Closed\nTUESDAY: 9:30 - 7:30\nWEDNESDAY: 9:30 - 7:30\nTHURSDAY: 9:30 - 7:30\nFRIDAY: 9:30 - 7:30\nSATURDAY: 9:30 - 7:30\nSUNDAY: 12:00 - 5:30\n`
-    		}
-    		sendResponse.directMessage(sender_psid, response);
-    		handleCases.timeOutReset(sender_psid);
+    		handleCases.getHourly(sender_psid);
     	}
 
     	// Handle case if in Address mode
     	else if (key.includes('_Address')) {
     		handleCases.addressView(sender_psid);
-    		handleCases.timeOutReset(sender_psid);
     	}
 
     	// Handle case if in Pricelist mode
     	else if (key.includes('_PriceList')) {
     		handleCases.priceList(sender_psid);
-    		handleCases.timeOutReset(sender_psid);
     	}
 
     	// Handle case if in Promotions mode
     	else if (key.includes('_Promotions')) {
     		handleCases.Promotions(sender_psid);
-    		handleCases.timeOutReset(sender_psid);
     	}
 
     	// Handle case if in Weather mode
@@ -100,24 +89,30 @@ function handleQuickReply(sender_psid, received_message) {
 		    }, 10000);
     	}
 
-    	// Handle case if in Call mode
+    	// Handle case if in call mode
     	else if (key.includes('_Call Now')) {
     		sendResponse.callOption(sender_psid);
     		handleCases.timeOutReset(sender_psid);
+    	}
+
+    	// Handle case if user no long want to use our bot
+    	else if (key.includes('_Exit')) {
+    		handleCases.quitBot(sender_psid);
     	}
 	} else if (key === 'Start_Start') {
 		handleCases.getBegin(sender_psid);
 		currentMode = [];
 	}
 
+	// Handle case if user decice to continue our bot or not
 	if (key.includes('CONTINUE')) {
 
-		// Handle case if user type yes
+		// Handle case if user type yes then go back to quick option
 		if (key.includes('_Yes')) {
-			handleCases.getBegin(sender_psid);
+			handleCases.goBack(sender_psid, 'yes');
 		}
 
-		// Handle case if user type no
+		// Handle case if user type no then prompt to exit
 		else if (key.includes('_No')) {
 			handleCases.quitBot(sender_psid);
 		}
@@ -128,6 +123,7 @@ function handleQuickReply(sender_psid, received_message) {
 function handlePostback(sender_psid, messagePostback) {
 	console.log("Current message: " + messagePostback.payload)
 }
+
 
 module.exports = {
   handleMessage,

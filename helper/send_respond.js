@@ -23,6 +23,7 @@ function directMessage(sender_psid, response) {
     });
 }
 
+// Generic template view
 function genericTemplate(sender_psid, payload, array, imageURL) {
     let button = dataFormat.nailSpaOptions(payload, array);
     let request_body = {
@@ -61,6 +62,7 @@ function genericTemplate(sender_psid, payload, array, imageURL) {
     });
 }
 
+// Quick replies UI web views
 function quickReplies(sender_psid, response, payloadCharacteristic, array) {
     let jsonFile = dataFormat.quickReplyFormat(payloadCharacteristic, array);
     let request_body = {
@@ -86,6 +88,7 @@ function quickReplies(sender_psid, response, payloadCharacteristic, array) {
     });
 }
 
+// Call UI
 function callOption(sender_psid) {
     let request_body = {
         "recipient": {
@@ -121,6 +124,7 @@ function callOption(sender_psid) {
     });
 }
 
+// Able to view on messager
 function webView(sender_psid, titleTemp, title, imgUrl, webUrl) {
     let request_body = {
         "recipient": {

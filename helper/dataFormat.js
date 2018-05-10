@@ -22,12 +22,7 @@ function nailSpaOptions(payloadCharacteristic, choices) {
     return finalArr;
 }
 
-function employeeOptions(payloadCharacteristic, choices) {
-
-}
-
 module.exports = {
 	quickReplyFormat,
-	nailSpaOptions,
-	employeeOptions
+	nailSpaOptions
 }
